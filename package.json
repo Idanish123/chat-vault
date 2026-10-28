@@ -1,0 +1,15 @@
+{
+  "name": "dmk-chat-vault-pc",
+  "version": "2.0.0",
+  "private": true,
+  "description": "Portable, local-first WhatsApp chat archive for Windows",
+  "scripts": {
+    "test": "node tools/build.js && node tests/run.js",
+    "test:browser": "node tools/build.js && node tests/browser.js",
+    "test:launcher": "node tools/build.js && node tests/launcher.js",
+    "test:release": "node tools/build.js --package && node tests/release.js",
+    "build": "node tools/build.js",
+    "package": "node tools/build.js --package"
+  },
+  "engines": { "node": ">=22" }
+}

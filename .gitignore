@@ -1,0 +1,44 @@
+node_modules/
+.env
+.env.*
+!.env.example
+vault.json
+*.jsonl
+*.jsonl.*
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Personal chat exports and vault data
+_chat.txt
+WhatsApp Chat*.txt
+chat.txt
+conversation*.txt
+exports/
+chats/
+vault/
+backups/
+*.csv
+*.db
+*.sqlite
+*.sqlite3
+*.rar
+*.7z
+*.tar
+*.tgz
+*.tar.gz
+
+# Logs and generated/private artifacts
+tests/results/
+logs/
+*.log
+*.log.*
+*.bin
+*.dmkvault
+*Recovery-Key*.txt
+*.zip
+*.zip.sha256
+*.exe
+app/offline.html
+app/version.json

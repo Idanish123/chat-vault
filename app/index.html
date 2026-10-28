@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data:; media-src blob:; connect-src 'self'; font-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; worker-src 'self' blob:; frame-src 'none'">
+  <meta name="description" content="Your personal WhatsApp archive. Open exported chats and media entirely in your browser, or download the offline viewer.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='18' fill='%23006d5b'/%3E%3Cpath d='M16 18h32v23H29l-10 8v-8h-3z' fill='none' stroke='white' stroke-width='4' stroke-linejoin='round'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="styles.css">
+  <title>DMK Chat Vault — Your personal WhatsApp archive</title>
+  <script src="core.js" defer></script>
+  <script src="vendor-rar.js" defer></script>
+  <script src="archives.js" defer></script>
+  <script src="vault.js" defer></script>
+  <script src="library.js" defer></script>
+  <script src="bootstrap.js" defer></script>
+  <script src="processor.js" defer></script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+<a class="skip-link" href="#message-area">Skip to conversation</a>
+<svg class="icon-sprite" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <symbol id="i-chat" viewBox="0 0 24 24"><path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.4 8.4 0 0 1 3.8-.9h.5a8.5 8.5 0 0 1 8 8v.5Z"/><path d="M8 10h8m-8 4h5"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="11" rx="3"/><path d="M8 10V7a4 4 0 0 1 8 0v3m-4 5v2"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><path d="m12 3 8 3v6c0 5-8 9-8 9s-8-4-8-9V6l8-3Z"/><path d="m8.5 11.5 2.5 2.5 4.5-5"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 4.5 4.5"/></symbol>
+  <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20.8 13A9 9 0 0 1 11 3.2 9 9 0 1 0 20.8 13Z"/></symbol>
+  <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></symbol>
+  <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3v12m-5-5 5 5 5-5M4 16v4h16v-4"/></symbol>
+  <symbol id="i-upload" viewBox="0 0 24 24"><path d="M12 16V4m-5 5 5-5 5 5M4 16v4h16v-4"/></symbol>
+  <symbol id="i-folder" viewBox="0 0 24 24"><path d="M3 7V5h7l2 3h9v12H3V7Z"/></symbol>
+  <symbol id="i-file" viewBox="0 0 24 24"><path d="M14 3H5v18h14V8l-5-5Zm0 0v5h5M8 13h8m-8 4h5"/></symbol>
+  <symbol id="i-image" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8" cy="8" r="1.5"/><path d="m21 15-6-6L3 21"/></symbol>
+  <symbol id="i-sticker" viewBox="0 0 24 24"><path d="M21 14V6a3 3 0 0 0-3-3H6a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3h8l7-7Z"/><path d="M14 21v-5a2 2 0 0 1 2-2h5M8 8h.1m7.9 0h.1M8 12c1 3 7 3 8 0"/></symbol>
+  <symbol id="i-video" viewBox="0 0 24 24"><rect x="3" y="5" width="13" height="14" rx="3"/><path d="m16 10 5-3v10l-5-3"/></symbol>
+  <symbol id="i-audio" viewBox="0 0 24 24"><path d="M4 10v4m4-8v12m4-15v18m4-14v10m4-7v4"/></symbol>
+  <symbol id="i-filter" viewBox="0 0 24 24"><path d="M4 6h16M7 12h10m-7 6h4"/></symbol>
+  <symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M6 18 18 6"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="m5 12 14 0m-6-6 6 6-6 6"/></symbol>
+  <symbol id="i-back" viewBox="0 0 24 24"><path d="M19 12H5m6-6-6 6 6 6"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol>
+  <symbol id="i-trash" viewBox="0 0 24 24"><path d="M3 6h18M9 6V3h6v3M5 6l1 15h12l1-15M10 10v7m4-7v7"/></symbol>
+  <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v6m0-10v.2"/></symbol>
+  <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></symbol>
+  <symbol id="i-cloud-off" viewBox="0 0 24 24"><path d="m3 3 18 18M5.6 6A5 5 0 0 0 6 16h9m3.5-1a4 4 0 0 0-1.5-7.8A6 6 0 0 0 9 3"/></symbol>
+  <symbol id="i-monitor" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8m-4-4v4"/></symbol>
+</svg>
+<div id="app" class="app-shell" hidden inert>
+  <nav class="rail" aria-label="Main navigation">
+    <div class="brand-mark" title="DMK Chat Vault"><svg class="icon"><use href="#i-chat"/></svg></div>
+    <button class="rail-button selected" id="chats-nav" aria-label="Show chats" title="Chats"><svg class="icon"><use href="#i-chat"/></svg></button>
+    <button class="rail-button" id="privacy-nav" aria-label="Privacy and security" title="Privacy & security"><svg class="icon"><use href="#i-shield"/></svg></button>
+    <div class="rail-spacer"></div>
+    <button class="rail-button" id="theme-button" aria-label="Switch to dark theme" title="Change theme"><svg class="icon"><use href="#i-moon"/></svg></button>
+    <button class="rail-button" id="help-button" aria-label="How to export a WhatsApp chat" title="Export guide"><svg class="icon"><use href="#i-info"/></svg></button>
+    <div class="owner-avatar" title="Your personal archive">D</div>
+  </nav>
+  <aside class="sidebar" aria-label="Chat library">
+    <header class="sidebar-header"><div><div class="wordmark">Chat Vault<span class="byline">by DMK</span></div><div class="sidebar-subtitle">Your personal WhatsApp archive</div></div><button class="icon-button" id="add-button" aria-label="Import chats" title="Import chats"><svg class="icon"><use href="#i-plus"/></svg></button></header>
+    <label class="search-field sidebar-search"><svg class="icon"><use href="#i-search"/></svg><input id="chat-search" type="search" placeholder="Search your chats" aria-label="Search chats"><kbd>/</kbd></label>
+    <div class="sidebar-tabs" role="group" aria-label="Chat filters"><button id="all-tab" class="chip active" aria-pressed="true">All chats <span id="chat-count">0</span></button><button id="media-tab" class="chip" aria-pressed="false">With media</button></div>
+    <div class="library-heading"><span id="library-label">YOUR LIBRARY</span><span id="library-size">SAVED ON THIS PC</span></div>
+    <div id="chat-list" class="chat-list"><div class="empty-library"><div class="empty-library-icon"><svg class="icon"><use href="#i-chat"/></svg></div><h2>A home for your conversations</h2><p>Import an exported chat.<br>It will appear right here.</p></div></div>
+    <div class="sidebar-bottom"><div class="local-indicator"><span class="status-dot"></span><span id="storage-indicator">Saved encrypted on this PC</span><svg class="icon"><use href="#i-lock"/></svg></div><p id="library-health" class="library-health" role="status"></p><button id="clear-button" class="text-button muted" disabled><svg class="icon"><use href="#i-lock"/></svg>Lock library</button><button id="storage-button" class="text-button muted">Backup & security</button><button id="demo-exit" class="text-button" hidden>Exit sample and set up library</button><button id="exit-app" class="text-button" hidden>Close app</button></div>
+  </aside>
+  <main id="main" class="main-pane">
+    <section id="welcome" class="welcome-view">
+      <header class="welcome-top"><span><span class="status-dot"></span>PRIVATE BY DESIGN</span><button id="privacy-top" class="text-button"><svg class="icon"><use href="#i-shield"/></svg>Privacy details</button></header>
+      <div class="welcome-content">
+        <div class="archive-illustration" aria-hidden="true"><div class="illustration-halo"></div><div class="archive-card archive-back"><span></span><span></span></div><div class="archive-card archive-front"><div class="mini-avatar"></div><div class="mini-lines"><span></span><span></span></div><div class="mini-bubble first"></div><div class="mini-bubble second"></div><div class="mini-bubble third"></div></div><div class="illustration-lock"><svg class="icon"><use href="#i-lock"/></svg></div><span class="spark s1">+</span><span class="spark s2">+</span><span class="spark s3"></span></div>
+        <div class="eyebrow">A LITTLE NOSTALGIA. A LOT OF PRIVACY.</div>
+        <h1>Your conversations,<br>back in your hands.</h1>
+        <p class="welcome-description">Rediscover your WhatsApp chats in a familiar space.<br>Saved on your PC. Ready whenever you return.</p>
+        <div id="drop-zone" class="drop-zone"><div class="drop-icon"><svg class="icon"><use href="#i-folder"/></svg></div><h2>Drop your chat export here</h2><p>WhatsApp .zip, .rar with media, or a .txt conversation</p><button id="import-button" class="primary-button"><svg class="icon"><use href="#i-plus"/></svg>Import a chat</button><span class="import-limit">ZIP 250 MB · RAR 100 MB · TXT 20 MB</span></div>
+        <div class="welcome-secondary"><button id="demo-button" class="text-button">Take a look with sample chats<svg class="icon"><use href="#i-arrow"/></svg></button><button id="export-guide" class="text-button muted">How do I export?</button></div>
+        <div class="privacy-features"><span><svg class="icon"><use href="#i-cloud-off"/></svg>No chat uploads</span><span><svg class="icon"><use href="#i-monitor"/></svg>Browser-only processing</span><span><svg class="icon"><use href="#i-lock"/></svg>No account for offline use</span></div>
+      </div>
+      <footer class="welcome-footer"><span>Made for your memories. Built to stay yours.</span><a href="dmk-chat-vault-pc.zip" download="DMK-Chat-Vault-PC.zip" id="offline-download"><svg class="icon"><use href="#i-download"/></svg>Download PC edition</a></footer>
+    </section>
+    <section id="conversation" class="conversation-view" hidden>
+      <header class="conversation-header"><button id="back-button" class="icon-button mobile-back" aria-label="Back to chats"><svg class="icon"><use href="#i-back"/></svg></button><div id="conversation-avatar" class="chat-avatar color-0">C</div><button id="chat-info-button" class="conversation-title"><h1 id="conversation-name"></h1><span id="conversation-meta"></span></button><span id="sample-badge" class="sample-badge" hidden>SAMPLE</span><div class="header-actions"><button id="search-toggle" class="icon-button" aria-label="Search messages" title="Search messages"><svg class="icon"><use href="#i-search"/></svg></button><button id="gallery-button" class="icon-button" aria-label="Open media gallery" title="Media gallery"><svg class="icon"><use href="#i-grid"/></svg></button><button id="filter-button" class="icon-button" aria-label="Filter messages" title="Filter messages"><svg class="icon"><use href="#i-filter"/></svg></button></div></header>
+      <div class="conversation-toolbar"><label class="perspective-label">View as <select id="view-as" aria-label="Align messages as this participant"></select></label><span id="message-count"></span><button id="export-text-button" class="text-button" title="Download the filtered conversation as text"><svg class="icon"><use href="#i-download"/></svg><span>Export text</span></button></div>
+      <div id="message-search-bar" class="message-search-bar" hidden><label class="search-field"><svg class="icon"><use href="#i-search"/></svg><input id="message-search" type="search" aria-label="Search messages in this chat" placeholder="Search this conversation"></label><span id="search-result-count" class="search-result-count" aria-live="polite"></span><button id="search-previous" class="icon-button search-nav-button" aria-label="Previous match" title="Previous match" disabled>↑</button><button id="search-next" class="icon-button search-nav-button" aria-label="Next match" title="Next match" disabled>↓</button><button id="close-search" class="icon-button" aria-label="Close search"><svg class="icon"><use href="#i-close"/></svg></button></div>
+      <div id="filters" class="filters" hidden><label>Sender<select id="sender-filter"><option value="">Everyone</option></select></label><label>From<input id="date-from" type="date"></label><label>To<input id="date-to" type="date"></label><label>Content<select id="type-filter"><option value="">All messages</option><option value="media">With attachments</option><option value="image">Images</option><option value="sticker">Stickers</option><option value="video">Videos</option><option value="audio">Audio</option><option value="document">Documents</option><option value="links">Links</option></select></label><button id="reset-filters" class="text-button">Reset</button></div>
+      <div id="import-notice" class="import-notice" hidden></div>
+      <div id="message-area" class="message-area" tabindex="0" aria-label="Conversation messages"><div id="messages" class="messages"></div></div>
+      <div class="conversation-pagination"><button id="older-button" class="text-button">← Older</button><span id="page-label"></span><button id="newer-button" class="text-button">Newer →</button><button id="latest-button" class="text-button">Latest ↓</button></div>
+      <button id="scroll-bottom-button" class="scroll-bottom-button" type="button" aria-label="Go to latest messages" title="Go to latest messages" hidden>↓ <span>Latest</span></button>
+      <footer class="conversation-footer"><svg class="icon"><use href="#i-lock"/></svg><span>This is your archive. Messages cannot be sent from here.</span><button id="remove-chat-button" class="text-button" title="Delete this saved conversation">Delete chat</button></footer>
+    </section>
+  </main>
+  <aside id="media-panel" class="media-panel" aria-label="Media gallery" hidden><header><div><h2>Media & documents</h2><p id="gallery-count"></p></div><button id="gallery-close" class="icon-button" aria-label="Close gallery"><svg class="icon"><use href="#i-close"/></svg></button></header><label class="gallery-filter-label">Show<select id="gallery-type"><option value="">All attachments</option><option value="image">Images</option><option value="sticker">Stickers</option><option value="video">Videos</option><option value="audio">Audio</option><option value="document">Documents</option></select></label><div id="gallery-items" class="gallery-items"></div><button id="gallery-more" class="text-button" hidden>Show more</button></aside>
+</div>
+<section id="vault-gate" class="vault-gate" aria-labelledby="vault-heading">
+  <div class="vault-gate-card"><div class="brand-mark"><svg class="icon"><use href="#i-chat"/></svg></div><div class="eyebrow">DMK CHAT VAULT · PC EDITION</div><h1 id="vault-heading">Your chats, here to stay.</h1><p id="vault-description">Read WhatsApp exports privately on your PC. No account or chat uploads.</p>
+  <div class="gate-preview"><button id="gate-demo" class="primary-button" type="button">Try sample chats first</button><button id="gate-guide" class="text-button" type="button">How to export and transfer a chat</button></div>
+  <ol class="setup-steps" aria-label="Library setup"><li>Choose where to save</li><li>Create a password</li><li>Save your recovery key</li><li>Import your chats</li></ol>
+  <div class="vault-location"><button id="choose-folder" class="primary-button" type="button">Choose or open a library folder</button><p>Recommended: create a folder called “Chat Vault Library” in Documents, separate from the app.</p><details><summary>Other storage options</summary><button id="choose-browser" class="text-button" type="button">Save in this browser profile instead</button><p>Browser storage is tied to this browser profile and app address. Clearing site data can erase it. Keep encrypted backups.</p></details><p id="vault-location-label" role="status">Choose a folder for your permanent chat library.</p></div>
+  <form id="vault-form"><label for="vault-password">Library password</label><input id="vault-password" type="password" minlength="12" autocomplete="current-password" required><div id="vault-confirm-wrap"><label for="vault-confirm">Confirm password</label><input id="vault-confirm" type="password" minlength="12" autocomplete="new-password"></div><p class="vault-password-note">Use at least 12 characters. Set up a recovery key after unlocking so you can reset a forgotten password.</p><p id="vault-error" class="vault-error" role="alert" hidden></p><button id="vault-submit" class="primary-button" type="submit" disabled>Create permanent library</button></form>
+  <button id="forgot-password-button" class="text-button forgot-password-button" type="button" hidden>Forgot password?</button>
+  <button id="gate-exit-app" class="text-button forgot-password-button" type="button" hidden>Close app</button>
+  <div id="restore-key-options" hidden><label><input id="restore-with-key" type="checkbox">Use a recovery key instead of the backup password</label><label for="restore-recovery-key">Backup recovery key</label><input id="restore-recovery-key" type="password" autocomplete="off"></div>
+  <div class="vault-gate-links"><button id="restore-backup-button" class="text-button">Restore an encrypted backup</button><a href="dmk-chat-vault-pc.zip" download="DMK-Chat-Vault-PC.zip">Download Windows PC edition</a></div><p class="vault-gate-note">Save multiple chats. Drop a newer export to update the same conversation. Files stay on your device.</p></div>
+</section>
+<input id="restore-backup-input" type="file" accept=".dmkvault" hidden>
+<input id="file-input" type="file" accept=".zip,.rar,.txt" multiple hidden>
+<dialog id="modal"><div class="modal-heading"><h2 id="modal-title"></h2><button id="modal-close" class="icon-button" aria-label="Close dialog"><svg class="icon"><use href="#i-close"/></svg></button></div><div id="modal-body" class="modal-body"></div></dialog>
+<div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+<div id="busy-overlay" class="busy-overlay" role="status" aria-live="polite" hidden><div class="busy-card"><div class="spinner" aria-hidden="true"></div><h2>Working on this device</h2><p id="busy-detail">Reading your export on this device</p><button id="cancel-import" class="text-button" type="button" hidden>Stop import</button></div></div>
+<noscript>This viewer needs JavaScript to process files on your device. No chat files are uploaded.</noscript>
+</body>
+</html>

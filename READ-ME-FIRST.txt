@@ -1,0 +1,27 @@
+DMK CHAT VAULT 2.0 — WINDOWS
+
+1. Extract the complete portable ZIP.
+2. Open DMK-Chat-Vault.exe. No visible console is required.
+3. Try sample chats before setting up a library.
+4. Choose a separate folder, create a password and save your recovery key.
+5. Import your WhatsApp TXT, ZIP or RAR export.
+
+OPTIONAL INSTALLATION
+Run Install.cmd to install for your Windows account and create a Start-menu shortcut. No Node.js or Python is needed for normal use. Edge or Chrome is required. The launcher is unsigned. Keep the extracted application files together.
+
+RECOVERY
+The recovery key must be created before the password is forgotten. Keep it separate from the vault. Anyone with both can read your chats. Forgot password? uses the saved key. Backup restoration also supports the recovery key with a new password. Old backups retain their earlier passwords and keys.
+
+BACKUP
+Backup & security validates encrypted records before preparing a backup. Check that your browser saves the download and keep a separate copy. Last backup status records preparation, not proof of a separately saved copy.
+
+NAVIGATION
+Search retains surrounding messages. Use arrows or Enter/Shift+Enter to move between matches. Latest / Ctrl+End clears filters and returns to the real conversation ending.
+
+CLOSING AND LOGS
+Close app locks the library and stops the local launcher. Inactivity also locks it automatically. Activity-log failures appear in the sidebar. Launcher logs are in %LOCALAPPDATA%\DMK Chat Vault\Logs. Exported logs, original exports, key downloads and plain-text downloads are unencrypted.
+
+UPDATES
+Close an older running copy first. Replace or install application files, then reopen the same separate library folder. Newly saved conversation records require Chat Vault 2.0 or later.
+
+Full requirements, limits, build steps, security details and verification scope are in README.md.

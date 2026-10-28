@@ -1,0 +1,21 @@
+name: Verify Windows release
+on: [push, pull_request, workflow_dispatch]
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: windows-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+          package-manager-cache: false
+      - run: node tools/build.js --package
+      - run: node tests/run.js
+      - run: node tests/launcher.js
+      - run: node tests/release.js
+      - run: node tests/browser.js
